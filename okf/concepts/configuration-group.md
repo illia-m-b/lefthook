@@ -1,0 +1,91 @@
+---
+type: concept
+title: group
+source: "https://lefthook.dev/configuration/group/"
+path: /configuration/group/
+updated: 2026-11-27
+okf:
+  generated_by: "@docmd/plugin-okf"
+  generated_at: "2026-11-27T14:02:50.784Z"
+---
+---
+title: "group"
+---
+
+# `group`
+
+You can define a group of jobs and configure how they should execute using the following options:
+
+- [`parallel`](./parallel.md): Executes all jobs in the group simultaneously.
+- [`piped`](./piped.md): Executes jobs sequentially, passing output between them.
+- [`jobs`](./jobs.md): Specifies the jobs within the group.
+
+#### Example
+
+```yml
+# lefthook.yml
+
+pre-commit:
+  jobs:
+    - group:
+        parallel: true
+        jobs:
+          - run: echo 1
+          - run: echo 2
+          - run: echo 3
+```
+
+If you specify `env`, `root`, `glob`, `exclude`, or `files` on a group, they will be inherited to the underlying jobs.
+
+```yml
+# lefthook.yml
+
+pre-commit:
+  jobs:
+    - env:
+        E1: hello
+      glob:
+        - "*.md"
+      exclude:
+        - "README.md"
+      root: "subdir/"
+      group:
+        parallel: true
+        jobs:
+          - run: echo $E1
+          - run: echo $E1
+            env:
+              E1: bonjour
+```
+
+A `files` command set on a group is executed for every nested job that uses the `{files}` template. A nested job can define its own `files` to override it.
+
+```yml
+# lefthook.yml
+
+pre-commit:
+  jobs:
+    - glob:
+        - "*.py"
+      files: git diff --name-only master
+      group:
+        jobs:
+          - run: ruff check {files}
+          - run: ruff format --check {files}
+            files: git ls-files
+```
+
+::: callout info Note
+To make a group mergeable with settings defined in local config or extends you have to specify the name of the job group belongs to:
+```yml
+pre-commit:
+  jobs:
+    - name: a name of a group
+      group:
+        jobs:
+          - name: lint
+            run: yarn lint
+          - name: test
+            run: yarn test
+```
+:::

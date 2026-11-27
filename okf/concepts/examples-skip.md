@@ -1,0 +1,44 @@
+---
+type: concept
+title: "Skip or run on condition"
+source: "https://lefthook.dev/examples/skip/"
+path: /examples/skip/
+updated: 2026-11-27
+okf:
+  generated_by: "@docmd/plugin-okf"
+  generated_at: "2026-11-27T14:02:50.803Z"
+---
+# Skip or run on condition
+
+Here are two hooks.
+
+`pre-commit` hook will only be executed when you're committing something on a branch starting with `dev/` prefix.
+
+In `pre-push` hook:
+- `test` command will be skipped if `NO_TEST` env variable is set to `1`
+- `lint` command will only be executed if you're pushing the `main` branch
+
+```yml
+# lefthook.yml
+
+pre-commit:
+  only:
+    - ref: dev/*
+  commands:
+    lint:
+      run: yarn lint {staged_files} --fix
+      glob: "*.{ts,js}"
+    test:
+      run: yarn test
+
+pre-push:
+  commands:
+    test:
+      run: yarn test
+      skip:
+        - run: test "$NO_TEST" -eq 1
+    lint:
+      run: yarn lint
+      only:
+        - ref: main
+```
