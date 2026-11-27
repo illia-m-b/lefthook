@@ -6,7 +6,7 @@ path: /usage/commands/add/
 updated: 2026-11-27
 okf:
   generated_by: "@docmd/plugin-okf"
-  generated_at: "2026-11-27T14:02:50.812Z"
+  generated_at: "2026-11-27T15:33:46.645Z"
 ---
 ---
 title: "lefthook add"

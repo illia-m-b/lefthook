@@ -6,7 +6,7 @@ path: /configuration/colors/
 updated: 2026-11-27
 okf:
   generated_by: "@docmd/plugin-okf"
-  generated_at: "2026-11-27T14:02:50.778Z"
+  generated_at: "2026-11-27T15:33:46.616Z"
 ---
 ---
 title: "colors"
